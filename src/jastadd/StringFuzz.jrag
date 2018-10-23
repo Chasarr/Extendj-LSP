@@ -1,0 +1,11 @@
+/** Replaces all string concatenation expressions with "X". */
+aspect StringFuzz {
+  rewrite AddExpr {
+    when (left().type().isString() && right().type().isString())
+    to Expr {
+      Expr replacement = new StringLiteral("X");
+      return replacement;
+    }
+  }
+}
+

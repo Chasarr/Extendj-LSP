@@ -16,7 +16,7 @@ jastadd {
     include("extendj/jastadd_modules") // Include core ExtendJ modules.
 
     module "template", {
-      imports "java8 frontend" // ExtendJ dependency for template module.
+      imports "java8 backend" // ExtendJ dependency for template module.
 
       jastadd {
         basedir "src/jastadd/"
@@ -43,9 +43,16 @@ jastadd {
   scanner.name = 'OriginalScanner'
 }
 
+dependencies {
+  testCompile 'junit:junit:4.12'
+  testCompile 'com.google.truth:truth:0.30'
+  testCompile 'org.apache.commons:commons-io:1.3.2'
+}
+
 sourceSets.main {
   java {
     srcDir 'extendj/src/frontend-main'
+    srcDir 'extendj/src/backend-main'
   }
   resources {
     srcDir 'extendj/src/res'
@@ -53,9 +60,14 @@ sourceSets.main {
   }
 }
 
+test {
+  description 'Run all tests except runtime tests.'
+  outputs.upToDateWhen { false } // Always re-run tests.
+  testLogging.exceptionFormat = "full"
+}
+
 // Use JavaCompiler if you need bytecode generation.
-jar.manifest.attributes 'Main-Class': 'org.extendj.JavaChecker'
-//jar.manifest.attributes 'Main-Class': 'org.extendj.JavaCompiler'
+jar.manifest.attributes 'Main-Class': 'org.extendj.JavaCompiler'
 jar.destinationDir = projectDir
 
 // Java -source and -target version.
